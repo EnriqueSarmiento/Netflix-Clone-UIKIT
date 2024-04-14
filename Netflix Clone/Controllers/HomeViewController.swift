@@ -25,6 +25,8 @@ class HomeViewController: UIViewController{
        homeFeedtable.delegate = self
        homeFeedtable.dataSource = self
        
+       homeFeedtable.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+       
     }
    
    // here we load our table as a subview
@@ -36,9 +38,14 @@ class HomeViewController: UIViewController{
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource  {
+   
+   func numberOfSections(in tableView: UITableView) -> Int {
+      return 20
+   }
+   
    //here we defined the numbers of rows for our cell
    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return 20
+      return 1
    }
    
    // here we defined our custom cell, we asure that the custom cell is loaded, otherwise we return a default cell
