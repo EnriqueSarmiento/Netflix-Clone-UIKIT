@@ -10,8 +10,8 @@ import UIKit
 class HomeViewController: UIViewController{
    
    let sectionTitles : [String] = [
-   "Trending Movies", "Popular",
-   "Trending TV", "Top Rated", "Upcoming Movies"
+   "Trending Movies","Trending TV", "Popular",
+   "Top Rated", "Upcoming Movies"
    ]
    
    //create a table for this view controller with our custom cell
@@ -113,7 +113,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource  {
       header.textLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
       header.textLabel?.frame = CGRect(x: header.bounds.origin.x + 20, y: header.bounds.origin.y, width: 100, height: header.bounds.height)
       header.textLabel?.textColor = .white
-      header.textLabel?.text = header.textLabel?.text?.lowercased()
+      header.textLabel?.text = header.textLabel?.text?.capitalizeFirstLetter()
    }
       
    
