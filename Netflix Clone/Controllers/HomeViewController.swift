@@ -36,6 +36,8 @@ class HomeViewController: UIViewController{
       //       homeFeedtable.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
       homeFeedtable.tableHeaderView = headerView
       
+      getTrendingMovies()
+      
    }
    
    private func configureNavBar(){
@@ -59,6 +61,19 @@ class HomeViewController: UIViewController{
    override func viewDidLayoutSubviews() {
       super.viewDidLayoutSubviews()
       homeFeedtable.frame = view.bounds
+   }
+   
+   private func getTrendingMovies(){
+      APICaller.shared.getTrendingMovies { results in
+         switch results {
+         case .success(let movies):
+            print("DEBUG: MOVIES", movies)
+         
+         case .failure(let error):
+            print("debug: error on get trending movies", error.localizedDescription)
+            
+         }
+      }
    }
    
 }
