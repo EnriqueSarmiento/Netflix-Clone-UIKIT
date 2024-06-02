@@ -88,6 +88,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource  {
          return UITableViewCell()
       }
       
+      cell.delegate = self
+      
       switch indexPath.section {
       case Sections.TrendingMovies.rawValue:
          APICaller.shared.getTrendingMovies { result in
@@ -176,4 +178,16 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource  {
    
    
    
+}
+
+extension HomeViewController: CollectionViewTableViewCellDelegate {
+   func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
+      DispatchQueue.main.async { [weak self] in
+         
+         let vc = TitlePreviewViewController()
+         
+         vc.configure(with: viewModel)
+         self?.navigationController?.pushViewController(vc, animated: true)
+      }
+   }
 }

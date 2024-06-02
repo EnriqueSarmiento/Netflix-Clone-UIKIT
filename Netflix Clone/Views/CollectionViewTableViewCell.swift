@@ -7,10 +7,16 @@
 
 import UIKit
 
+protocol CollectionViewTableViewCellDelegate: AnyObject {
+   func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel)
+}
+
 class CollectionViewTableViewCell: UITableViewCell {
 
    // cell identifier for our table
    static let identifier = "CollectionViewTableViewCell"
+   
+   weak var delegate: CollectionViewTableViewCellDelegate?
    
    private var titles : [Title] = [Title]()
    
@@ -64,5 +70,26 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
       guard let model = titles[indexPath.row].poster_path else { return UICollectionViewCell() }
       cell.configure(with: model)
       return cell
+   }
+   
+   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+      collectionView.deselectItem(at: indexPath, animated: true)
+      let title = self.titles[indexPath.row]
+      
+      let name = title.original_name ?? title.original_title ?? "Unknown"
+      
+      APICaller.shared.getMovie(with: name + " trailer") {[weak self] result in
+         switch result {
+         case .success(let videoElement):
+            let viewModel = TitlePreviewViewModel(title: name, youtubeView: videoElement, titleOverview: title.overview ?? "")
+            guard let strongSelf = self else {return}
+            
+            self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
+            print(videoElement.id)
+            
+         case.failure(let error):
+            print("error on collection view table api call for video", error.localizedDescription)
+         }
+      }
    }
 }
