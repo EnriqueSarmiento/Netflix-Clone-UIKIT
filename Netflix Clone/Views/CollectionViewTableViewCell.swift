@@ -56,6 +56,12 @@ class CollectionViewTableViewCell: UITableViewCell {
          self?.collectionView.reloadData()
       }
    }
+   
+   private func downloadTitleAt(indexPath: IndexPath){
+      let title = titles[indexPath.row]
+      print("downloading \(title.original_title ?? title.original_name ?? "")")
+      
+   }
 
 }
 
@@ -91,5 +97,18 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
             print("error on collection view table api call for video", error.localizedDescription)
          }
       }
+   }
+   
+   /** this fucntions allow long press and show a menu of option on each collection*/
+   func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+      let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+         let downloadAction = UIAction(title: "Download", state: .off) { [weak self] _ in
+            self?.downloadTitleAt(indexPath: indexPath)
+         }
+         
+         return UIMenu(title: "", image:  nil, identifier: nil, options:  .displayInline, children: [downloadAction])
+         
+      }
+      return config
    }
 }
